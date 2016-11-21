@@ -1,0 +1,174 @@
+$typography-color: #444;
+$headings-color: #222;
+$typography-font: serif;
+$headings-font: serif;
+$typography-line-height: 1.65;
+$headings-scale: 1.125;
+
+$base-font-size: 14;
+
+$small-breakpoint: em(768, 16);
+$small-font-size: 15;
+
+$medium-breakpoint: em(992, 16);
+$medium-font-size: 16;
+
+$large-breakpoint : em(1200, 16);
+$large-font-size: 17;
+
+// the value that you want to be equal to the base font size should be first
+$typ-headings: (
+ h5, h4, h3, h2, h1
+) !default;
+
+// these are the types that you want to be less than the value of the base font size
+$typ-sub-headings: (
+ h6 
+) !default;
+
+
+/**************************************************************************************
+ * 
+ * 
+ *  Functions
+ * 
+ * 
+ *************************************************************************************/
+
+@function em($pixels, $base) {
+  @return #{$pixels/$base}em
+}
+
+
+@function rem($pixels, $base) {
+  @return #{$pixels/$base}rem
+}
+
+@function measure-margin($scale, $measure, $base, $unit)
+{
+  $pixel: $scale/$measure;
+  $rem: $pixel * $base;
+  
+  @if $unit == rem
+  {
+    @return $pixel + rem;
+  }
+  
+  @else{
+    @return $rem * 1px;
+  }
+}
+
+/**************************************************************************************
+ * 
+ * 
+ *  Mixins
+ * 
+ * 
+ *************************************************************************************/
+ 
+@mixin headings($base, $headings-scale, $extend)
+{
+  @each $item in $typ-headings
+  {
+    #{$item} {
+      @if $extend == true {
+        @extend %headings;
+      }
+      $size: index($typ-headings, $item);
+      @include typescale($base, $size, $headings-scale);
+    }
+  
+  }
+}
+
+@mixin subheadings($base, $headings-scale, $extend)
+{
+  @each $item in $typ-sub-headings
+  {
+    #{$item} {
+      @if $extend == true {
+        @extend %headings;
+      }
+      $size: index($typ-sub-headings, $item);
+      $size: $size + 1 ;
+      @include subtypescale($base, $size, $headings-scale);
+    }
+  
+  }
+}
+
+
+
+%headings
+{
+  text-rendering: optimizeLegibility;
+  line-height: 1;
+  margin-top: 0;
+  color: $headings-color;
+	-webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin typescale($base, $size, $headings-scale)
+{
+  $font-size: $base;
+  @for $i from 1 to $size {
+      $font-size: $font-size * $headings-scale;
+  }
+  font-size: $font-size * 1px;
+  font-size: em($font-size, $base);
+	font-family: $headings-font;
+  margin-bottom: measure-margin($font-size, $base * $typography-line-height, $base, $unit: px);
+  margin-bottom: measure-margin($font-size, $base * $typography-line-height, $base, $unit: rem);
+}
+
+@mixin subtypescale($base, $size, $headings-scale)
+{
+  $font-size: $base;
+  @for $i from 1 to $size {
+      $font-size: $font-size / $headings-scale;
+  }
+  font-size: $font-size * 1px;
+  font-size: em($font-size, $base);
+	font-family: $headings-font;
+  margin-bottom: measure-margin($font-size, $base * $typography-line-height, $base, $unit: px);
+  margin-bottom: measure-margin($font-size, $base * $typography-line-height, $base, $unit: rem);
+}
+
+/**************************************************************************************
+ * 
+ * 
+ *  Styles
+ * 
+ * 
+ *************************************************************************************/
+ 
+html { font-family: $typography-font; color: $typography-color; font-size: $base-font-size * 1px; line-height: $typography-line-height }
+
+@include headings($base-font-size, $headings-scale, $extend: true);
+@include subheadings($base-font-size, $headings-scale, $extend: true);
+
+@media (min-width: $small-breakpoint)
+{
+  html { font-size: $small-font-size * 1px; }
+  @include headings($small-font-size, $headings-scale, $extend: false);
+  @include subheadings($small-font-size, $headings-scale, $extend: false);
+
+}
+
+@media (min-width: $medium-breakpoint)
+{
+  html  { font-size: $medium-font-size * 1px; }
+  @include headings($medium-font-size, $headings-scale, $extend: false);
+  @include subheadings($medium-font-size, $headings-scale, $extend: false);
+
+}
+
+@media (min-width: $large-breakpoint)
+{
+  html  { font-size: $large-font-size * 1px; }
+  @include headings($large-font-size, $headings-scale, $extend: false);
+  @include subheadings($large-font-size, $headings-scale, $extend: false);
+
+}

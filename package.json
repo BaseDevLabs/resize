@@ -1,0 +1,20 @@
+{
+  "name": "resize-typography",
+  "version": "0.1.0",
+  "description": "",
+  "author": "Matthew Shealy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BaseDevLabs/resize"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-copy": "0.0.2",
+    "gulp-sass": "^2.3.2"
+  },
+  "dependencies": {
+    "normalize.css": "^5.0.0"
+  }
+}
